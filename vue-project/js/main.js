@@ -85,13 +85,16 @@ Vue.component('product', {
         cart: 0          
     }},
     methods: {
-        addToCart() {
-            this.cart += 1
+        updateCart(id) {
+            this.cart.push(id);
         },
+        addToCart() {
+            this.$emit('add-to-cart');
+        },         
         updateProduct(index) {
             this.selectedVariant = index;
             console.log(index);
-        }         
+        }
      },
      computed: {
         title() {
@@ -112,13 +115,14 @@ Vue.component('product', {
             } else {
                 return 2.99
             }
-         }                  
-     }        
- })
+         }
+     }                          
+})
  let app = new Vue({
     el: '#app',
     data: {
-        premium: true
+        premium: true,
+        cart: []
     }
  })
  
