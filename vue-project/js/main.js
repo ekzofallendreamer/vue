@@ -20,9 +20,6 @@ Vue.component('product', {
             <p v-else class="outofstock">Out of Stock</p>
       <span v-if="onSale">On Sale</span>
       <span v-else>Out of Sale</span>
-      <ul>
-         <li v-for="detail in details">{{ detail }}</li>
-      </ul>
       
       <p>Shipping: {{ shipping }}</p>
 
@@ -38,12 +35,7 @@ Vue.component('product', {
       <ul>
          <li v-for="size in sizes">{{ size }}</li>
       </ul>
-
-      
-
-      <div class="cart">
-         <p>Cart({{ cart }})</p>
-      </div>
+        <div>
       <button
          v-on:click="addToCart"
          :disabled="!inStock"
@@ -51,6 +43,7 @@ Vue.component('product', {
       >
          Add to cart
       </button>
+      </div
     </div>
     
     
@@ -59,11 +52,14 @@ Vue.component('product', {
 </div>
   `,
   
+  
     data() {
         return {
         product: "Socks",
         brand: 'Vue Mastery',
         selectedVariant: 0,
+        sale: "On Sale!",
+        description: "A pair of warm, fuzzy socks",
         altText: "A pair of warm, fuzzy socks",
         link: "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks",
         details: ['80% cotton', '20% polyester', 'Gender-neutral'],
@@ -81,15 +77,12 @@ Vue.component('product', {
                 variantQuantity: 0
             }
          ],
-        sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
-        cart: 0          
+        sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],         
     }},
     methods: {
-        updateCart(id) {
-            this.cart.push(id);
-        },
         addToCart() {
-            this.$emit('add-to-cart');
+            this.$emit('add-to-cart',
+            this.variants[this.selectedVariant].variantId);
         },         
         updateProduct(index) {
             this.selectedVariant = index;
@@ -118,11 +111,28 @@ Vue.component('product', {
          }
      }                          
 })
+
+Vue.component('product-details', {
+    template: `
+        <ul>
+            <li v-for="detail in details">{{ detail }}</li>
+        </ul>
+    `,
+})
+
  let app = new Vue({
     el: '#app',
     data: {
         premium: true,
-        cart: []
+        cart: [],
+    },
+    methods: {
+        updateCart(id) {
+            this.cart.push(id);
+        },
+        removeFromCart() {
+            this.cart.pop(id);
+        }
     }
  })
  
